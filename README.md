@@ -29,4 +29,11 @@ In JalView or other fasta editors we can check the occupancy of the sequences an
 <h3>Coding genes</h3>
 For codon partitioning we need to have exact length of sequences for all sequences that is dividable to 3.
 
+<h2>Make nexus file</h2>
+If we use IQ TREE without codon partition we don't need a nexus file. If we do, or use other programms like Mr Bayes, we do need a nexus file.
+with open(output_nexus, "a") as f:
+    f.write(mrbayes_block)
 
+print(f"MrBayes block appended. File is ready to run in MrBayes on HPC!")
+
+"""
