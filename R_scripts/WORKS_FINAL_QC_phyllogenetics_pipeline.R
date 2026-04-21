@@ -1,6 +1,6 @@
 library(ape)
 library(pegas)
-#library(readr)
+library(readr)
 
 # ==========================================================
 # --- 1. SETTINGS & FOLDER SELECTION ---
@@ -20,6 +20,8 @@ load_clean_mat <- function(path) {
   lines <- readLines(path)
   h_idx <- grep("^>", lines)
   names <- gsub("^>", "", lines[h_idx])
+  #Strip everything from the "/" to the end (Jalview length suffix)
+  names <- gsub("/.*$", "", names)
   seqs <- sapply(1:length(h_idx), function(i) {
     start <- h_idx[i] + 1
     end <- if(i < length(h_idx)) h_idx[i+1] - 1 else length(lines)
@@ -35,18 +37,15 @@ load_clean_mat <- function(path) {
 # ==========================================================
 # --- 2. STEP 1: INITIAL QC ---
 # ==========================================================
-cat("\nStep 1: Select your RAW UNFILTERED alignment and Metadata generated from the Python API script...")
+cat("\nStep 1: Select your RAW UNFILTERED alignment generated from the Python API script...")
 
 #Fasta file 
 raw_path <- file.choose()
 mat_raw  <- load_clean_mat(raw_path)
 
+cat("\nStep 2: Select your raw data generated from the Python API script...")
 #Metadata file
-metadata_raw <- read.table(file.choose(), sep="\t", header=TRUE)
-
-#Check that the metadata and fasta have the same length
-nrow(mat_passed_qc) 
-nrow(metadata_passed_qc)
+metadata_raw <- read_tsv(file.choose())
 
 #Check that they are in the same order
 if (!all(rownames(mat_raw) == metadata_raw$Sequence_ID)) {
@@ -71,6 +70,12 @@ write.table(deletion_log, paste0(PROJECT_LABEL, "_Deletion_Log.tsv"), sep="\t", 
 
 mat_passed_qc <- mat_raw[!is_fragment, , drop = FALSE]
 metadata_passed_qc <- metadata_raw[!is_fragment, , drop = FALSE]
+
+
+#Check that the metadata and fasta have the same length
+nrow(mat_passed_qc) 
+nrow(metadata_passed_qc)
+
 
 # ==========================================================
 # --- 3. STEP 2: PRE-TRIM COLLAPSE ---
