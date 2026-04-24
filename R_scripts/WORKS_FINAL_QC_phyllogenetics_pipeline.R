@@ -5,9 +5,9 @@ library(readr)
 # ==========================================================
 # --- 1. SETTINGS & FOLDER SELECTION ---
 # ==========================================================
-PROJECT_LABEL <- "COI"  
+PROJECT_LABEL <- "ITS1_5.8S_ITS2"  
 QC_THRESHOLD  <- 0.45    
-IS_CODING     <- TRUE    # TRUE for COI, FALSE for 18S/ITS
+IS_CODING     <- FALSE   # TRUE for COI, FALSE for 18S/ITS, For partition of ITS--> ITS1_5.8S_ITS2
 GENETIC_CODE  <- 5       # 5 = Invertebrate Mito, 1 = Standard Nuclear
 
 cat("SELECT THE FOLDER WHERE YOU WANT TO SAVE ALL YOUR FILES...")
@@ -258,14 +258,23 @@ for (post_grp in unique(merge_tracker$Step_2_Post_Trim_Group)) {
 write.table(merge_tracker, paste0(PROJECT_LABEL, "_Merge_Event_Log.tsv"), sep="\t", row.names=F, quote=F)
 
 # ==========================================================
-# --- 7. COMPREHENSIVE FINAL SUMMARY ---
+# --- 7. COMPREHENSIVE FINAL SUMMARY & AUTO-CLEAN ---
 # ==========================================================
 verification <- "PASSED"
+has_stop <- rep(FALSE, nrow(final_mat)) # Default: no stops
+
 if(IS_CODING) {
-  # Translate to check for internal stops
   final_prot <- trans(as.DNAbin(final_mat), code = GENETIC_CODE)
-  if(any(apply(as.character(final_prot), 1, function(x) any(x[1:(length(x)-1)] == "*")))) {
-    verification <- "FAILED - STOPS FOUND"
+  # Check each sequence for internal stops
+  has_stop <- apply(as.character(final_prot), 1, function(x) any(x[1:(length(x)-1)] == "*"))
+  
+  if(any(has_stop)) {
+    verification <- "FAILED - STOPS REMOVED"
+    bad_hap_ids <- rownames(final_mat)[has_stop]
+    cat("\n🚨 CULPRITS FOUND! Removing haplotypes with stop codons:", paste(bad_hap_ids, collapse=", "))
+    
+    # Actually remove them
+    final_mat <- final_mat[!has_stop, , drop = FALSE]
   }
 } else {
   verification <- "N/A (Non-coding)"
@@ -274,36 +283,40 @@ if(IS_CODING) {
 summary_text <- capture.output({
     cat("\n--- FINAL PIPELINE REPORT ---\n")
     cat("Status (Reading Frame):  ", verification, "\n")
-    cat("1. Total Started:        ", total_start, "\n")
+    cat("1. Total Started:         ", total_start, "\n")
     cat("2. Passed QC (>45% gaps):", nrow(mat_passed_qc), "\n")
-    cat("3. Haplotypes Pre-Trim:  ", num_unique_pre, "\n")
-    cat("4. Haplotypes Post-Trim: ", nrow(haps_post), "\n")
-    cat("5. Merged by Trimming:   ", num_unique_pre - nrow(haps_post), "\n")
+    cat("3. Haplotypes Pre-Trim:   ", num_unique_pre, "\n")
+    cat("4. Haplotypes Post-Trim: ", length(has_stop), "\n")
+    cat("5. Sequences Removed:    ", sum(has_stop), "\n")
+    cat("6. Final Tree Sequences: ", nrow(final_mat), "\n")
     
     if(IS_CODING) {
-      cat("6. Left-Side Shift:      ", final_offset, "bp\n")
-      cat("7. Right-Side Trim:      ", final_remainder, "bp\n")
+      cat("7. Left-Side Shift:       ", final_offset, "bp\n")
+      cat("8. Right-Side Trim:       ", final_remainder, "bp\n")
     }
-    
-    cat("8. Total n (Corrected):  ", sum(cumulative_n), "\n")
     cat("------------------------------\n")
 })
 
-# Print to console and save to file
+# Print to console
 cat(summary_text, sep="\n")
+
+# SAVE THE CLEANED FASTA
+writeLines(paste0(">", rownames(final_mat), "\n", apply(final_mat, 1, paste, collapse = "")), 
+           paste0(PROJECT_LABEL, "_final_tree_CLEANED.fasta"))
+
+# Save summary
 writeLines(summary_text, paste0(PROJECT_LABEL, "_Final_Summary.txt"))
 
-cat("\nDONE! All files saved to:", my_folder, "\n")
+# ==========================================================
+# --- 8. IQ-TREE PARTITION GENERATOR (ADAPTIVE) ---
+# ==========================================================
 
-# ==========================================================
-# --- 8. IQ-TREE PARTITION GENERATOR (CODING ONLY) ---
-# ==========================================================
+final_len <- ncol(final_mat)
+partition_filename <- paste0(PROJECT_LABEL, "_partition.nex")
+
 if (IS_CODING) {
-  final_len <- ncol(final_mat)
-  
-  # Check if length is actually a multiple of 3 before making partition
+  # --- COI / PROTEIN CODING LOGIC ---
   if (final_len %% 3 == 0) {
-    # This creates a NEXUS-compliant partition file for IQ-TREE
     partition_content <- c(
       "#nexus",
       "begin sets;",
@@ -312,15 +325,33 @@ if (IS_CODING) {
       paste0("    charset part3 = 3-", final_len, "\\3;"),
       "end;"
     )
-    
-    partition_filename <- paste0(PROJECT_LABEL, "_partition.nex")
     writeLines(partition_content, partition_filename)
-    
-    cat("\nSUCCESS: NEXUS Partition file created:", partition_filename)
-    cat("\nFormat: 1,2,3 codon positions defined for", final_len, "bp.\n")
+    cat("\nSUCCESS: NEXUS Codon Partition created:", partition_filename)
   } else {
-    cat("\nERROR: Cannot create partition file. Length", final_len, "is not divisible by 3.")
+    cat("\nERROR: Length", final_len, "is not divisible by 3.")
   }
+  
+} else if (PROJECT_LABEL == "ITS1_5.8S_ITS2") {
+  # --- ITS (SEGMENTED) LOGIC ---
+  cat("\n--- ITS PARTITION SETUP ---")
+  cat("\nYour total alignment length is:", final_len)
+  
+  # We use s58_end instead of 5.8S_end because R variables can't start with numbers
+  val_its1 <- as.numeric(readline(prompt="Enter the LAST column of ITS1 (e.g. 250): "))
+  val_s58  <- as.numeric(readline(prompt="Enter the LAST column of 5.8S (e.g. 410): "))
+  
+  partition_content <- c(
+    "#nexus",
+    "begin sets;",
+    paste0("    charset ITS1 = 1-", val_its1, ";"),
+    paste0("    charset S5.8 = ", val_its1 + 1, "-", val_s58, ";"),
+    paste0("    charset ITS2 = ", val_s58 + 1, "-", final_len, ";"),
+    "end;"
+  )
+  writeLines(partition_content, partition_filename)
+  cat("\nSUCCESS: NEXUS ITS Segmented Partition created:", partition_filename)
+
 } else {
-  cat("\nNOTICE: IS_CODING is FALSE. Skipping partition file generation.")
+  # --- NO NEXUS CREATED ---
+  cat("\nNOTICE: No partition file required for", PROJECT_LABEL, ". Skipping Section 8.")
 }
