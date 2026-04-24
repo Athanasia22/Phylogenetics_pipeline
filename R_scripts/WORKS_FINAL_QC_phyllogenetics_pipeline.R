@@ -209,6 +209,22 @@ rownames(final_mat) <- paste0("Hap_", 1:nrow(final_mat), "_n", cumulative_n)
 writeLines(paste0(">", rownames(final_mat), "\n", apply(final_mat, 1, paste, collapse = "")), 
            paste0(PROJECT_LABEL, "_final_tree.fasta"))
 
+
+final_summary_table <- data.frame(
+  Final_Hap_ID   = paste0("Hap_", 1:length(receipt_list), "_n", cumulative_n),
+  acc_versioned  = sapply(supp_map_list, function(x) x$Representative),
+  species_name   = sapply(supp_map_list, function(x) {
+                     metadata_passed_qc$Species[metadata_passed_qc$Sequence_ID == x$Representative][1]
+                   }),
+  Total_n        = cumulative_n,
+  ncbi_country   = sapply(receipt_list, function(x) x$Countries),
+  Original_IDs   = sapply(receipt_list, function(x) x$Original_Names),
+  stringsAsFactors = FALSE
+)
+
+# Save this as your "Plotting Metadata"
+write_tsv(final_summary_table, paste0(PROJECT_LABEL, "_Metadata_for_Plotting.tsv"))
+
 # ==========================================================
 # --- 6. MERGE TRACKER ---
 # ==========================================================

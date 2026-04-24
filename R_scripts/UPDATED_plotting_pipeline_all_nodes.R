@@ -7,7 +7,7 @@ library(ape); library(ggtree); library(ggplot2); library(dplyr); library(readr);
 
 # --- USER TOGGLE ---
 SHOW_NUMBERS <- FALSE  # TRUE = text | FALSE = Shape Dots (Black/Gray/White)
-GENE_NAME    <- "COX1"
+GENE_NAME    <- "18S"
 
 # ---------------------------------------------------------
 # 2. LOAD FILES
@@ -18,7 +18,7 @@ tree <- read.tree(file.choose())
 ######################DON'T FORGET TO CHANGE THE OUTGROUP#####################
 rooted_tree <- root(tree, outgroup = "Hap_8_n1", resolve.root = TRUE) #as shown in the fasta/treefile
 
-print("Select your Python-generated Metadata TSV...")
+print("Select your Metadata TSV...")
 metadata <- read_tsv(file.choose(), show_col_types = FALSE)
 
 # ---------------------------------------------------------
@@ -46,13 +46,23 @@ node_data <- data.frame(
 # ---------------------------------------------------------
 # 4. LABEL BUILDING (Standard R Plotmath)
 # ---------------------------------------------------------
+# 1. Create the pretty labels (bold accession, italic species)
 metadata <- metadata %>%
   mutate(new_label = paste0('bold("', acc_versioned, '") ~ italic("', species_name, '") ~ "|" ~ "', ncbi_country, ' [n=', Total_n, ']"'))
 
-# Re-match to tree tips
+# 2. Get tree tips (Hap_1_n4, etc.)
 current_tips <- rooted_tree$tip.label
-clean_tips <- gsub("_n[0-9]+", "", current_tips) 
-rooted_tree$tip.label <- metadata$new_label[match(clean_tips, metadata$Final_Hap_ID)]
+
+# 3. Match DIRECTLY to Final_Hap_ID column (No gsub needed!)
+matched_indices <- match(current_tips, metadata$Final_Hap_ID)
+
+# 4. Diagnostic: Check if we found them
+cat("\nMatching Status:", sum(!is.na(matched_indices)), "out of", length(current_tips), "tips matched.\n")
+
+# 5. Apply the labels
+rooted_tree$tip.label <- ifelse(!is.na(matched_indices), 
+                                metadata$new_label[matched_indices], 
+                                current_tips)
 
 # ---------------------------------------------------------
 # 5. THE PLOT (Standard Fonts + Red Greece)
@@ -113,22 +123,22 @@ print(final_plot)
 #########CHANGE WD###########################
 while (!is.null(dev.list())) dev.off()
 
-setwd("C:/Users/nasia/Lab/trees/18S")   #18S--> W=9.5, H=5, COI--> W=11, H=18, ITS--> W=13, H=10
+setwd("C:/Users/nasia/Lab/trees/18S")   #18S--> W=12, H=5, COI--> W=11, H=18, ITS--> W=13, H=10
 # Save with standard proportions
 ggsave(paste0(GENE_NAME, "_Phylogeny_Final.jpg"), 
-       plot = final_plot, width = 9.5, height = 5, units = "in", dpi = 600)
+       plot = final_plot, width = 12, height = 5, units = "in", dpi = 600)
 
 
 # --- SAVE AS EPS (Vector for Scientific Reports) ---
 ggsave(paste0(GENE_NAME, "_Phylogeny_Final.eps"), 
        plot = final_plot, 
        device = cairo_ps,        # Use cairo_ps for better font handling
-       width = 9.5, height = 5, units = "in")
+       width = 12, height = 5, units = "in")
 
 # --- SAVE AS TIFF (600 DPI High-Res) ---
 ggsave(paste0(GENE_NAME, "_Phylogeny_Final.tiff"), 
        plot = final_plot, 
-       width = 9.5, height = 5, units = "in",
+       width = 12, height = 5, units = "in",
        #limitsize = FALSE, 
        dpi = 600,
        compression = "lzw")    
