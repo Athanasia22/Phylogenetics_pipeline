@@ -7,7 +7,7 @@ library(ape); library(ggtree); library(ggplot2); library(dplyr); library(readr);
 
 # --- USER TOGGLE ---
 SHOW_NUMBERS <- FALSE  # TRUE = text | FALSE = Shape Dots (Black/Gray/White)
-GENE_NAME    <- "COI"
+GENE_NAME    <- "ITS1_5.8S_ITS2"
 
 # ---------------------------------------------------------
 # 2. LOAD FILES
@@ -16,7 +16,9 @@ print("Select your .treefile...")
 tree <- read.tree(file.choose())
 
 ######################DON'T FORGET TO CHANGE THE OUTGROUP#####################
-rooted_tree <- root(tree, outgroup = "Hap_156_n1", resolve.root = TRUE) #as shown in the fasta/treefile
+rooted_tree <- root(tree, outgroup = "Hap_54_n1", resolve.root = TRUE) #as shown in the fasta/treefile
+
+#rooted_tree <- midpoint(tree)
 
 print("Select your Metadata TSV...")
 metadata <- read_tsv(file.choose(), show_col_types = FALSE)
@@ -114,7 +116,7 @@ p <- p + geom_text2(
 final_plot <- p + 
   hexpand(0.35) + 
   geom_treescale(x = 0, y = -1, offset = 0.4, fontsize = 3, linesize = 0.6, width = 0.01) +
-  theme(legend.position = c(0.15, 0.2), #x,y down right is 1,0 #ITS: 0.15, 0.35, COI: 0.15, 0.2, 18S: 0.85, 0.15
+  theme(legend.position = c(0.85, 0.15), #x,y down right is 1,0 #ITS: 0.15, 0.35, COI: 0.15, 0.2, 18S: 0.85, 0.15
         legend.title = element_text(face="bold"),
         legend.background = element_rect(color="black", fill="white"),
         legend.margin = margin(6, 6, 6, 6))
@@ -123,22 +125,22 @@ print(final_plot)
 #########CHANGE WD###########################
 while (!is.null(dev.list())) dev.off()
 
-setwd("C:/Users/nasia/Lab/trees/COI/new")   #18S--> W=12, H=5, COI--> W=12, H=18, ITS--> W=13, H=10
+setwd("C:/Users/nasia/Lab/trees/")   #18S--> W=12, H=5, COI--> W=12, H=18, ITS--> W=13, H=10
 # Save with standard proportions
 ggsave(paste0(GENE_NAME, "_Phylogeny_Final.jpg"), 
-       plot = final_plot, width = 12, height = 18, units = "in", dpi = 600)
+       plot = final_plot, width = 11, height = 10, units = "in", dpi = 600)
 
 
 # --- SAVE AS EPS (Vector for Scientific Reports) ---
 ggsave(paste0(GENE_NAME, "_Phylogeny_Final.eps"), 
        plot = final_plot, 
        device = cairo_ps,        # Use cairo_ps for better font handling
-       width = 12, height = 18, units = "in")
+       width = 11, height = 10, units = "in")
 
 # --- SAVE AS TIFF (600 DPI High-Res) ---
 ggsave(paste0(GENE_NAME, "_Phylogeny_Final.tiff"), 
        plot = final_plot, 
-       width = 12, height = 18, units = "in",
+       width = 11,  height = 10, units = "in",
        #limitsize = FALSE, 
        dpi = 600,
        compression = "lzw")    
