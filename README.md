@@ -173,7 +173,7 @@ iqtree2 -s [alignment].fasta -p [alignment_partition].nex -m MFP+MERGE -B 1000 -
 4. Check the AIC, BIC etc. statistics from the .iqtree file to decide on the tree (partition or not)
 5. Download the .treefile
 
-### Tree visualization
+## 9. Tree visualization
 
 ><b>Use the script</b>: visualization_metadata_phylogenetics.R
 
@@ -183,7 +183,7 @@ This script:
 3. Integrates the metadata to create a title: <b>Accession number</b> <i> Species name</i> | Country [n=(number of collapsed haplotypes)]
 4. Depicts Bootstrap and SH-aLRT (Shimodaira-Hasegawa approximate Likelihood Ratio Test) into numbers or dots with a legend
 
-### Supplementary data creation
+## 10. Supplementary data creation
 
 Use the _representative_map.tsv and copy the Representative accession number and Collapsed haplotypes.
 MOdify accordingly (names of columns, comma instead of semicolon etc)
