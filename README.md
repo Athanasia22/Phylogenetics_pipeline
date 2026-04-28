@@ -3,17 +3,17 @@ My data is from zooplankton!
 Data analysis is conducted for genes: COI, 18S, ITS
 
 
-1. [Project Overview](#project-overview)
-2. [Fetch Sequences](#fetch-sequences)
-3. [Multiple Sequence Alignment](#multiple-sequence-alignment)
-4. [Preparation for Quality Control (QC)](#preparation-for-quality-control-(QC))
-5. [QC and filtering](#QC-and-filtering)
-6. [Trimming with trimal](#trimming-with-trimal)
-7. [Check effects of trimming](#check-effects-of-trimming)
-8. [Tree construction](#tree-construction)
-9. [Tree visualization](#tree-visaulization)
-10. [Supplemetary data creation](#supplementary-data-creation)
-11. [Bibliography](#bibliography)
+1. [Project Overview](#1-project-overview)
+2. [Fetch Sequences](#2-fetch-sequences)
+3. [Multiple Sequence Alignment](#3-multiple-sequence-alignment)
+4. [Preparation for Quality Control (QC)](#4-preparation-for-quality-control-(QC))
+5. [QC and filtering](#5-QC-and-filtering)
+6. [Trimming with trimal](#6-trimming-with-trimal)
+7. [Check effects of trimming](#7-check-effects-of-trimming)
+8. [Tree construction](#8-tree-construction)
+9. [Tree visualization](#9-tree-visaulization)
+10. [Supplemetary data creation](#10-supplementary-data-creation)
+11. [Bibliography](#11-bibliography)
 
 ## 1. Project Overview
 This project was built to analyze the copepod species of the genus <i>Pseudodiaptomus</i> but can be used for any sequences.
