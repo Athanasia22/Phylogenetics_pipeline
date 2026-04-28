@@ -1,64 +1,96 @@
 # Phylogenetics_pipeline
 My data is from zooplankton!
-
 Data analysis is conducted for genes: COI, 18S, ITS
+
 
 1. [Project Overview](#project-overview)
 2. [Fetch Sequences](#fetch-sequences)
+3. [Multiple Sequence Alignment](#multiple-sequence-alignment)
+4. [Preparation for Quality Control (QC)](#preparation-for-quality-control-(QC))
+5. [QC and filtering](#QC-and-filtering)
+6. [Trimming with trimal](#trimming-with-trimal)
+7. [Check effects of trimming](#check-effects-of-trimming)
+8. [Tree construction](#tree-construction)
+9. [Tree visualization](#tree-visaulization)
+10. [Supplemetary data creation](#supplementary-data-creation)
 
 ## Project Overview
-This project analyzes copepod species of the genus <i>Pseudodiaptomus</i>
+This project was built to analyze the copepod species of the genus <i>Pseudodiaptomus</i> but can be used for any sequences.
 
 
 ## Fetch sequences 
-Usual databases: NCBI, BOLD (for COI)
+<b><p style=red>Use the script </b></p>: API_NCBI.ipynb
 
-<b>Best:</b> download data from the whole genus, because especially for COI, a phylogenetic tree for species only is generally not good.
+Usual databases: NCBI, BOLD (for COI). <b>Best:</b> download data from the whole genus
 
 <b><i>Add an outgroup for root!</b></i> Can be from the same family but different genus or closely related family. BlastN your data, select to show 5000 sequences and pick one from the list.
 
-
-
+<h2>1. Use API requsts to fetch sequences and metadata
 <h2>2. Bulild your alignment</h2>
-Add your main sequences, your own data and the outgroup.
-You can do this manually in a fasta file (easiest), or in an app like MEGA11, Unipro UGENE, JalView
-or with coding.
+Add your fetched sequences, your own data and the outgroup.
 
-1. Make sure to include all names of the gene you're working on:
-   
-   <p> a. (Pseudodiaptomus[Organism]) AND (COI OR COX1 OR "cytochrome oxidase subunit I" OR "cytochrome c oxidase subunit 1")</p>
-   <p> b. (Pseudodiaptomus[Organism]) AND (18S OR "small subunit ribosomal RNA" OR SSU) </p>
-   <p> c. (Pseudodiaptomus[Organism]) AND (ITS OR "internal transcribed spacer" OR "ITS1" OR "ITS2") </p>
-2. Download from NCBI: Send to--> Complete Record--> File... FASTA
-3. If you have any complete genomes and are a fraction of all of your sequences you can manually download for them the coding sequences for them and keep only the gene you like. Then, edit the headers and insert them into the fasta with the rest of the sequences 
+<b> This script also: </b>
+1. Includes all names of the gene you're working on
+2. If complete genomes exist, adds only the part you're interested in
 
+### Multiple sequence alignment
+There are many tools: MAFFT, MUSCLE, Clustal Omega, T-Coffee etc. 
 
-<h2>3. Multiple sequence alignment</h2>
-There are many tools out there: MAFFT, MUSCLE, Clustal Omega, T-Coffee etc. Most used ones are MAFFT and ClustalW.
+1. Perform multiple sequence alignment (MSA) in the raw data
+2. Cut the sequences at the boundaries of your own data if you have any
+3. Optional: perform MSA again
 
+### Preparation for Quality Control (QC)
 
-In JalView or other fasta editors we can check the occupancy of the sequences and trim the start and end for positions for example under a threshold of occupancy. Or use trimmming algorithms, such as TrimAl. For 18S sometimes the sequences differ greatly in length depending on the sequencing machine. For 18S since it's non coding we can more freely trim the sequences.
+If you have sequences of ITS, you will likely have the <b>whole ITS1-5.8S-ITS2 operon</b>. Before filtering and extra trimming it's best that you have identified the 5.8S area so that it's easier to find it again when more columns are removed.
 
-The first steps to clearing up the data are these:
+The 5.8S gene is bout 160-170bp. Whith this in mind:
 
+1. Open the alignment in a viewer like Jalview
+2. Find a sequence among them that is annotated in NCBI and copy the 5.8S gene area <b>without gaps</b>
+3. Search for this known sequence
+4. Adjust the edges: if you find conserved nucleotides among your sequences include them BUT remember the overall length
 
-1. Peform MSA in an editor app e.g. Jalview with e.g. MAFFT
-2. Cut all the sequences at the length of your own sequence (If you don't have any reference sequence, cut where most sequences start/end).
-Using a custom code:
-3. Remove sequences that don't cover at least 45% of your sequence
-4. Collapse them into haplotypes
+### QC and filtering
 
-10. The final fasta and "receipts" will get created
+<b><p style=red>Use the script </b></p>: QC_haplotype_phylogenetics.R
 
-11. To check the effects of trimming, variable site, GC contect, gaps etc.:
+<b>This script:</b>
 
-We can use AMAS and download through BioConda to our HPC.
+1. Calculates the percentage of gaps and ambiguous bases (N)
+2. Removes sequences have more than 45% gaps
+3. Identifies sequences that are 100% identical and collapses them in two steps: Before trimming and after
+4. Fixes the reading frame for coding genes (dividable to 3, no stop codons)
+5. Creates partiotion file for coding genes and for operons
+6. Creates fasta for trimming, final fasta and "receipts"
+
+### Trimming with trimal
+
+After the initial haplotype collapsing, perform trimming with trimal using these steps in our HPC:
+<i> you can change the names in []. Remember to <b>remove the []</b></i>
 
 ```bash
 module load  gcc/14.2.0 miniconda3/24.7.1
 source $CONDA_PROFILE/conda.sh
-conda create []
-conda activate []
+conda create [trimal]
+conda activate [trimal]
+conda install bioconda::trimal
+trimal -in [alignment_for_trimal].fasta -out [alignment_trimmed].fasta -automated1
+```
+<i>! Remember to be in the folder in which you have your alignment_for_trimal.fasta </i>
+
+<b>After this continue with the QC_haplotype_phylogenetics.R pipeline </b>
+
+### Check effects of trimming
+
+To check the effects of trimming, variable site, GC contect, gaps etc. we can use AMAS through our HPC.
+<i> you can change the names in []. Remember to <b>remove the []</b></i>
+
+```bash
+module load  gcc/14.2.0 miniconda3/24.7.1
+source $CONDA_PROFILE/conda.sh
+conda create [amas]
+conda activate [amas]
 conda install bioconda::amas
 ```
 
@@ -75,23 +107,81 @@ grep -i amas
 ```
 Use the answer, in this case: AMAS.py
 
+### Tree construction
 
-Create the partition nexus file </h1>
+For Maximum Likelihood (ML) trees, the most famous and fast algorith is the IQTREE. We use that in the HPC.
+In the Aristotelis HPC of Aristotle Univeristy of Thessaloniki it's already installed.
+
+```bash
+module load gcc/14 iq-tree/2.3.2
+```
+If you need to download it:
+<i> you can change the names in []. Remember to <b>remove the []</b></i>
+
+```bash
+module load  gcc/14.2.0 miniconda3/24.7.1
+source $CONDA_PROFILE/conda.sh
+conda create [iqtree]
+conda activate [iqtree]
+conda install bioconda::iqtree
+```
+
+<h3>IQTREE commands</h3>
+
+<b>-m MFP </b>: Model Finder Pro, determins best Model
+<b>-m MFP+MERGE </b>: Model Finder Pro and greedy algorith MERGE, finds best model for each partition and megres them if statistically better
+<b>-m TESTONLY </b>: 
+<b>-B or -bb </b>: Ultrafast Bootstrap (UFboot)
+<b>-alrt </b>: SH-aLRT (Shimodaira-Hasegawa approximate Likelihood Ratio Test)
+<b>-bnni </b>: optimize UFBoot trees by nearest neighbor interchange (NNI) on corresponding bootstrap alignments
+<b>-nt AUTO </b>: automatically determines the optimal number of cores 
+<b>-st  </b>: sequence type
+<b>-s  </b>: sequences file
+<b>-p </b>: partition file
+<b>-pre </b>: name of the files created
 
 
-<h1> Going to tree-construction: </h1>
+1. Run the -m TESTONLY first to check for sequences that fail the chi2 test. If they are not sequences of interest you can remove them.
 
-1. Run ML trees first without partition (partition is used for coding genes only)
-   
-2. Check if some sequences fail the chi2 test and remove them (If we removed sequences with only a few bases and many gaps it's likely that not many sequences will fail the chi2 test. But since it depends on the composition of the sequences we inserted it heavily depends on which sequences we are comparing each time. So, if some sequences fail in one test might not fail in another.)
-3. Run again the non-partition if neccesary and then run the partition
-4. Check the AIC, BIC etc. statistics to decide on the tree (partition or not)
+```bash
+iqtree2 -s [alignment].fasta -m TESTONLY
+```
+for the coding genes with partition specifically:
+<b> Change the translation table accordingly, NT2AA5 is for invertebrate mitochondrial </b>
 
+```bash
+iqtree2 -s [alignment].fasta -m TESTONLY -st NT2AA5
+```
 
+<b>For the trees without -m TESTONLY
 
+2. Run ML trees first without partition (partition is used for coding genes or for the ITS "operon").
+<i>For publications you could use bootstrap of 10,000, but for an initial tree to be faster you can just use 1,000</i>
 
-<h3>Coding genes</h3>
-For codon partitioning we need to have exact length of sequences for all sequences that is dividable to 3.
+```bash
+iqtree2 -s [alignment].fasta -m MFP -B 1000 -alrt 2000 -nt AUTO -pre [no_partition] -bnni
+```
 
-<h2>Make nexus file</h2>
-If we use IQ TREE without codon partition we don't need a nexus file. If we do, or use other programms like Mr Bayes, we do need a nexus file. But we do need a nexus file for codon partition.
+3. Run the partition model
+
+```bash
+iqtree2 -s [alignment].fasta -p [alignment_partition].nex -m MFP+MERGE -B 1000 -bnni -alrt 2000 -nt AUTO -pre [partition]
+```
+
+4. Check the AIC, BIC etc. statistics from the .iqtree file to decide on the tree (partition or not)
+5. Download the .treefile
+
+### Tree visualization
+
+<b><p style=red>Use the script </b></p>: visualization_metadata_phylogenetics.R
+
+This script:
+1. Uses the .treefile and metadata file created from the QC_haplotype_phylogenetics.R script
+2. Roots the tree using the Haplotype name
+3. Integrates the metadata to create a title: <b> Accession number</b> <i> Species name</i> | Country [n=(number of collapsed haplotypes)]
+4. Depicts Bootstrap and SH-aLRT (Shimodaira-Hasegawa approximate Likelihood Ratio Test) into numbers or dots with a legend
+
+### Supplementary data creation
+
+Use the _representative_map.tsv and copy the Representative accession number and Collapsed haplotypes.
+MOdify accordingly (names of columns, comma instead of semicolon etc)
