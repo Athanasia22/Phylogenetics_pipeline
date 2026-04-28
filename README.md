@@ -13,6 +13,7 @@ Data analysis is conducted for genes: COI, 18S, ITS
 8. [Tree construction](#tree-construction)
 9. [Tree visualization](#tree-visaulization)
 10. [Supplemetary data creation](#supplementary-data-creation)
+11. [Bibliography](#bibliography)
 
 ## 1. Project Overview
 This project was built to analyze the copepod species of the genus <i>Pseudodiaptomus</i> but can be used for any sequences.
@@ -187,3 +188,74 @@ This script:
 
 Use the _representative_map.tsv and copy the Representative accession number and Collapsed haplotypes.
 MOdify accordingly (names of columns, comma instead of semicolon etc)
+
+
+## 11. Bibliography
+
+<details>
+<summary><b>Click to expand Software Citations</b></summary>
+
+R Core Team (2025). _R: A Language and Environment for Statistical
+  Computing_. R Foundation for Statistical Computing, Vienna, Austria.
+  <https://www.R-project.org/>.
+
+Wickham H, Hester J, Bryan J (2026). _readr: Read Rectangular Text
+  Data_. doi:10.32614/CRAN.package.readr
+  <https://doi.org/10.32614/CRAN.package.readr>, R package version
+  2.2.0, <https://CRAN.R-project.org/package=readr>.
+
+Paradis E, Schliep K (2019). “ape 5.0: an environment for modern
+  phylogenetics and evolutionary analyses in R.” _Bioinformatics_,
+  *35*, 526-528. doi:10.1093/bioinformatics/bty633
+  <https://doi.org/10.1093/bioinformatics/bty633>.
+
+Paradis E (2010). “pegas: an R package for population genetics with
+  an integrated-modular approach.” _Bioinformatics_, *26*, 419-420.
+  doi:10.1093/bioinformatics/btp696
+  <https://doi.org/10.1093/bioinformatics/btp696>.
+
+
+Guangchuang Yu. (2022). Data Integration, Manipulation and
+  Visualization of Phylogenetic Trees (1st edition). Chapman and
+  Hall/CRC. <https://doi:10.1201/9781003279242>
+
+Shuangbin Xu, Lin Li, Xiao Luo, Meijun Chen, Wenli Tang, Li Zhan, Zehan Dai, Tommy T. Lam, Yi Guan, Guangchuang Yu.      Ggtree: A serialized data object for    visualization of a phylogenetic tree and annotation data iMeta 2022, 4(1):e56. <https:doi:10.1002/imt2.56>
+
+Guangchuang Yu. Using ggtree to visualize data on tree-like
+structures. _Current Protocols in Bioinformatics_, 2020, 69:e96. <https:doi:10.1002/cpbi.96>
+
+Guangchuang Yu, Tommy Tsan-Yuk Lam, Huachen Zhu, Yi Guan. Two methods for mapping and visualizing associated data on phylogeny using ggtree. _Molecular Biology and Evolution 2018_, 35(2):3041-3043. <https:doi:10.1093/molbev/msy194>
+
+Guangchuang Yu, David Smith, Huachen Zhu, Yi Guan, Tommy Tsan-YukLam. ggtree: an R package for visualization and annotation of phylogenetic trees with their covariates and other associated data. _Methods in Ecology and Evolution 2017_, 8(1):28-36. <https:doi:10.1111/2041-210X.12628>
+
+H. Wickham. ggplot2: Elegant Graphics for Data Analysis.
+  _Springer-Verlag New York_, 2016.
+
+Wickham H, François R, Henry L, Müller K, Vaughan D (2026). _dplyr: A
+Grammar of Data Manipulation_. doi:10.32614/CRAN.package.dplyr <https://doi.org/10.32614/CRAN.package.dplyr>, R package version 1.2.0, <https://CRAN.R-project.org/package=dplyr>.
+
+Wickham H (2025). _stringr: Simple, Consistent Wrappers for Common
+  String Operations_. doi:10.32614/CRAN.package.stringr
+  <https://doi.org/10.32614/CRAN.package.stringr>, R package version 1.6.0, <https://CRAN.R-project.org/package=stringr>.
+
+Cock, P. J., Antao, T., Chang, J. T., Chapman, B. A., Cox, C. J., Dalke, A., Abbassi, L., Gebremedhin, M. T., & de Hoon, M. J. (2009). Biopython: freely available Python tools for computational molecular biology and bioinformatics. Bioinformatics, 25(11), 1422-1423. <https://doi.org/10.1093/bioinformatics/btp163>
+
+Eric W Sayers, Evan E Bolton, J Rodney Brister, Kathi Canese, Jessica Chan, Donald C Comeau, Ryan Connor, Kathryn Funk, Chris Kelly, Sunghwan Kim, Tom Madej, Aron Marchler-Bauer, Christopher Lanczycki, Stacy Lathrop, Zhiyong Lu, Francoise Thibaud-Nissen, Terence Murphy, Lon Phan, Yuri Skripchenko, Tony Tse, Jiyao Wang, Rebecca Williams, Barton W Trawick, Kim D Pruitt, Stephen T Sherry, Database resources of the national center for biotechnology information, _Nucleic Acids Research_, Volume 50, Issue D1, 7 January 2022, Pages D20–D26, <https://doi.org/10.1093/nar/gkab1112>
+
+
+The pandas development team. (2026). pandas-dev/pandas: Pandas (v3.0.2). Zenodo. <https://doi.org/10.5281/zenodo.19340003>
+
+Van Rossum, G., & Drake, F. L. (2009). Python 3 Reference Manual. CreateSpace, Scotts Valley, CA.
+<https://www.python.org/>
+
+Capella-Gütiérrez, S., Silla-Martínez, J. M. & Gabaldón, T. trimAl: a tool for automated alignment trimming in large-scale phylogenetic analyses. _Bioinformatics_ 25, 1972–1973 (2009). 
+
+Minh, B. Q. et al. IQ-TREE 2: New Models and Efficient Methods for Phylogenetic _Inference in the Genomic Era. Mol. Biol. Evol. 37_, 1530–1534 (2020).
+
+Kalyaanamoorthy, S., Minh, B. Q., Wong, T. K. F., von Haeseler, A. & Jermiin, L. S. ModelFinder: Fast model selection for accurate phylogenetic estimates. _Nat. Methods 14_, 587–589 (2017).
+
+Chernomor, O., von Haeseler, A. & Minh, B. Q. Terrace Aware Data Structure for Phylogenomic Inference from Supermatrices. _Syst. Biol._ 65, 997–1008 (2016).
+
+Hoang, D. T., Chernomor, O., von Haeseler, A., Minh, B. Q. & Vinh, L. S. UFBoot2: Improving the Ultrafast Bootstrap Approximation. _Mol. Biol. Evol. 35_, 518–522 (2018).
+
+</details>
