@@ -6,7 +6,7 @@ Data analysis is conducted for genes: COI, 18S, ITS
 1. [Project Overview](#1-project-overview)
 2. [Fetch Sequences](#2-fetch-sequences)
 3. [Multiple Sequence Alignment](#3-multiple-sequence-alignment)
-4. [Preparation for Quality Control (QC)](#4-preparation-for-quality-control)
+4. [Preparation for Quality Control](#4-preparation-for-quality-control)
 5. [QC and filtering](#5-QC-and-filtering)
 6. [Trimming with trimal](#6-trimming-with-trimal)
 7. [Check effects of trimming](#7-check-effects-of-trimming)
