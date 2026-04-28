@@ -70,7 +70,7 @@ The 5.8S gene is bout 160-170bp. Whith this in mind:
 ## 6. Trimming with trimal
 
 After the initial haplotype collapsing, perform trimming with trimal using these steps in our HPC:
-<i> you can change the names in []. Remember to <b>remove the []</b></i>
+>you can change the names in []. Remember to <b>remove the []</b>
 
 ```bash
 module load  gcc/14.2.0 miniconda3/24.7.1
@@ -87,7 +87,6 @@ trimal -in [alignment_for_trimal].fasta -out [alignment_trimmed].fasta -automate
 ## 7. Check effects of trimming
 
 To check the effects of trimming, variable site, GC contect, gaps etc. we can use AMAS through our HPC.
-<i> you can change the names in []. Remember to <b>remove the []</b></i>
 
 ```bash
 module load  gcc/14.2.0 miniconda3/24.7.1
@@ -119,7 +118,7 @@ In the Aristotelis HPC of Aristotle Univeristy of Thessaloniki it's already inst
 module load gcc/14 iq-tree/2.3.2
 ```
 If you need to download it:
-<i> you can change the names in []. Remember to <b>remove the []</b></i>
+
 
 ```bash
 module load  gcc/14.2.0 miniconda3/24.7.1
