@@ -6,12 +6,12 @@ Data analysis is conducted for genes: COI, 18S, ITS
 1. [Project Overview](#1-project-overview)
 2. [Fetch Sequences](#2-fetch-sequences)
 3. [Multiple Sequence Alignment](#3-multiple-sequence-alignment)
-4. [Preparation for Quality Control (QC)](#4-preparation-for-quality-control-(QC))
+4. [Preparation for Quality Control (QC)](#4-preparation-for-quality-control)
 5. [QC and filtering](#5-QC-and-filtering)
 6. [Trimming with trimal](#6-trimming-with-trimal)
 7. [Check effects of trimming](#7-check-effects-of-trimming)
 8. [Tree construction](#8-tree-construction)
-9. [Tree visualization](#9-tree-visaulization)
+9. [Tree visualization](#9-tree-visualization)
 10. [Supplemetary data creation](#10-supplementary-data-creation)
 11. [Bibliography](#11-bibliography)
 
@@ -44,7 +44,7 @@ There are many tools: MAFFT, MUSCLE, Clustal Omega, T-Coffee etc.
 2. Cut the sequences at the boundaries of your own data if you have any
 3. Optional: perform MSA again
 
-## 4. Preparation for Quality Control (QC)
+## 4. Preparation for Quality Control
 
 If you have sequences of ITS, you will likely have the <b>whole ITS1-5.8S-ITS2 operon</b>. Before filtering and extra trimming it's best that you have identified the 5.8S area so that it's easier to find it again when more columns are removed.
 
