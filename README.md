@@ -48,7 +48,7 @@ There are many tools: MAFFT, MUSCLE, Clustal Omega, T-Coffee etc.
 
 If you have sequences of ITS, you will likely have the <b>whole ITS1-5.8S-ITS2 operon</b>. Before filtering and extra trimming it's best that you have identified the 5.8S area so that it's easier to find it again when more columns are removed.
 
-The 5.8S gene is bout 160-170bp. Whith this in mind:
+The 5.8S gene is about 160-170bp. With this in mind:
 
 1. Open the alignment in a viewer like Jalview
 2. Find a sequence among them that is annotated in NCBI and copy the 5.8S gene area <b>without gaps</b>
