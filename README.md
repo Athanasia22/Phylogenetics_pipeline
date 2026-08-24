@@ -1,6 +1,6 @@
 # Phylogenetics_pipeline
 <p align="center">
-  <img src="Phylogenetics pipeline.png" alt="Project Banner" width="640">
+  <img src="Phylogenetics_pipeline.png" alt="Project Banner" width="640">
 </p>
 
 My data is from zooplankton and work specifically for the copepod <i>Pseudodiaptomus marinus</i>!
