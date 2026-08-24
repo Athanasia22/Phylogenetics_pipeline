@@ -1,7 +1,4 @@
 # Phylogenetics_pipeline
-<p align="center">
-  <img src="Phylogenetics_pipeline.png" alt="Project Banner" width="640">
-</p>
 
 My data is from zooplankton and work specifically for the copepod <i>Pseudodiaptomus marinus</i>!
 Data analysis is conducted for genes: COI, 18S, ITS
@@ -18,6 +15,10 @@ Data analysis is conducted for genes: COI, 18S, ITS
 9. [Tree visualization](#9-tree-visualization)
 10. [Supplemetary data creation](#10-supplementary-data-creation)
 11. [Bibliography](#11-bibliography)
+
+<p align="center">
+  <img src="Phylogenetics_pipeline.png" alt="Project Banner" width="640">
+</p>
 
 ## 1. Project Overview
 This project was built to analyze the copepod species of the genus <i>Pseudodiaptomus</i> but can be used for any sequences.
