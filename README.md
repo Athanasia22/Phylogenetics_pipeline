@@ -4,7 +4,7 @@ My data is from zooplankton and work specifically for the copepod <i>Pseudodiapt
 Data analysis is conducted for genes: COI, 18S, ITS
 
 <p align="center">
-  <img src="Phylogenetics_pipeline.png" alt="Project Banner" width="850">
+  <img src="Phylogenetics_pipeline_2.png" alt="Project Banner" width="850">
 </p>
 
 1. [Project Overview](#1-project-overview)
