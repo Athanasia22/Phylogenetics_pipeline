@@ -3,6 +3,9 @@
 My data is from zooplankton and work specifically for the copepod <i>Pseudodiaptomus marinus</i>!
 Data analysis is conducted for genes: COI, 18S, ITS
 
+<p align="center">
+  <img src="Phylogenetics_pipeline.png" alt="Project Banner" width="850">
+</p>
 
 1. [Project Overview](#1-project-overview)
 2. [Fetch Sequences](#2-fetch-sequences)
@@ -16,9 +19,6 @@ Data analysis is conducted for genes: COI, 18S, ITS
 10. [Supplemetary data creation](#10-supplementary-data-creation)
 11. [Bibliography](#11-bibliography)
 
-<p align="center">
-  <img src="Phylogenetics_pipeline.png" alt="Project Banner" width="640">
-</p>
 
 ## 1. Project Overview
 This project was built to analyze the copepod species of the genus <i>Pseudodiaptomus</i> but can be used for any sequences.
