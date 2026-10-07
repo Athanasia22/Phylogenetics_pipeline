@@ -5,7 +5,7 @@ library(readr)
 # ==========================================================
 # --- 1. SETTINGS & FOLDER SELECTION ---
 # ==========================================================
-PROJECT_LABEL <- "ITS1_5.8S_ITS2"  
+PROJECT_LABEL <- "Oithona_18S"  
 QC_THRESHOLD  <- 0.45    
 IS_CODING     <- FALSE   # TRUE for COI, FALSE for 18S/ITS, For partition of ITS--> ITS1_5.8S_ITS2
 GENETIC_CODE  <- 5       # 5 = Invertebrate Mito, 1 = Standard Nuclear
