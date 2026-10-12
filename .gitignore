@@ -16,6 +16,7 @@ alignments/
 API_NCBI/
 R_scripts/old
 Python_scripts/Old
+Python_scripts/OTU_scraper.ipynb
 raw_data/
 .Rhistory
 .RData
